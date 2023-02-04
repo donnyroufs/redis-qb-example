@@ -1,0 +1,35 @@
+@startuml
+!theme vibrant
+
+abstract class Where {
+  + {abstract} toString(): string
+}
+
+class WhereAnd extends Where
+class WhereField extends Where {
+  + eq(value: string): Search
+}
+
+class SearchException extends Node.Error
+
+class Search {
+  - rootWhere: Where | null
+  + and(field: string): WhereField
+  + where(): WhereField
+  + toString(): string
+}
+
+note left of RedisString::value
+  Escapes the string value
+end note
+
+class RedisString {
+  + value: string {readonly}
+}
+
+Search --> Where
+Search --> SearchException
+WhereField --> RedisString
+
+
+@enduml
